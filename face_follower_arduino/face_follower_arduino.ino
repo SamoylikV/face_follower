@@ -28,4 +28,9 @@ void loop() {
       in = "";
     }
   }
+  //==================
+  //moving servos because that's what cool guys do
+  rotX.write(rotX.read()+(Xpos-256)/64);
+  rotY.write(rotY.read()+(Ypos-256)/64);
+  
 }
