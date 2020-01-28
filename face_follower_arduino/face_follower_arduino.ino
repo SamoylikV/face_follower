@@ -1,8 +1,8 @@
 #include <Servo.h>
 Servo rotX;
 Servo rotY;
-int xpos = 0;
-int ypos = 0;
+int Xpos = 0;
+int Ypos = 0;
 String in = "";
 boolean isx = true;
 
@@ -20,11 +20,11 @@ void loop() {
       in += (char)inChar;
     }
     if (inChar == '_') {
-      Xpos = in.toInt());
+      Xpos = in.toInt();
       in = "";
     }
     if (inChar == '\n') {
-      Ypos = in.toInt());
+      Ypos = in.toInt();
       in = "";
     }
   }
