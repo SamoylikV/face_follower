@@ -8,7 +8,7 @@ import sys
 arduino = serial.Serial('COM5', 115200, timeout=.1)
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
 
 width = cap.get(3)
 height = cap.get(4)
@@ -24,12 +24,12 @@ while True:
     faces = face_cascade.detectMultiScale(gray, 1.3, 5)
 
     for (x, y, w, h) in faces:
-        cv2.rectangle(img, (x, y), (x + w, y + h),
-                      (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)), 2)
+        cv2.rectangle(img, (x, y), (x + w, y + h), (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)), 2)
         roi_gray = gray[y:y + h, x:x + w]
         roi_color = img[y:y + h, x:x + w]
-        print(x, y)
-        arduino.write((str(x / width * 512) + '_' + str(y / height * 512)).encode())
+        out = (str(round(x / width * 512))[:-2] + 'a' + str(round(y / height * 512))[:-2]+'b')
+        print(out)
+        arduino.write(out.encode())
         'x max = 500, x min = 10, y min = 50, x max = x'
 
     cv2.imshow('img', img)
