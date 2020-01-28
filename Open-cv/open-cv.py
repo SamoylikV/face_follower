@@ -2,7 +2,7 @@ import numpy as np
 import cv2
 import serial
 
-arduino = serial.Serial('COM1', 115200, timeout=.1)
+arduino = serial.Serial('COM5', 115200, timeout=.1)
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
 cap = cv2.VideoCapture(0)
@@ -17,7 +17,9 @@ while 1:
         roi_gray = gray[y:y + h, x:x + w]
         roi_color = img[y:y + h, x:x + w]
         print(x, y)
-        arduino.wirte("x" + '|', "y")
+        arduino.write(str(x))
+        arduino.write('_')
+        arduino.write(str(y))
         'x max = 500, x min = 10, y min = 50, x max = x'
 
     cv2.imshow('img', img)
