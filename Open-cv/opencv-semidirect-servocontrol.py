@@ -27,8 +27,8 @@ while True:
         cv2.rectangle(img, (x, y), (x + w, y + h), (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)), 2)
         roi_gray = gray[y:y + h, x:x + w]
         roi_color = img[y:y + h, x:x + w]
-        x = ((x - width) * 2000 / width)
-        y = ((y - height) * 2000 / height)
+        x = (x * 2000 / width)
+        y = (y * 2000 / height)
         out = ('#1P' + str(round(x + 500))[:-2] + '#2P' + str(round(y))[:-2] + 'T100\r\n')
         print(out)
         servo.write(out.encode())
