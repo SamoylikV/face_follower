@@ -8,6 +8,9 @@ import sys
 servo = serial.Serial('/dev/ttyACM0', 9600, timeout=.1)
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
+xout = 1000
+yout = 1000
+
 cap = cv2.VideoCapture(0)
 
 width = cap.get(3)
@@ -27,9 +30,12 @@ while True:
         cv2.rectangle(img, (x, y), (x + w, y + h), (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)), 2)
         roi_gray = gray[y:y + h, x:x + w]
         roi_color = img[y:y + h, x:x + w]
-        x = (x * 2000 / width)
-        y = (y * 2000 / height)
-        out = ('#1P' + str(round(x + 500))[:-2] + '#2P' + str(round(y+500))[:-2] + 'T100\r\n')
+        
+        xpos = (x-width/2)
+        ypos = (y+height/2)
+        xout = round(np.clip(xout + xpos * 2 / width if (abs(ypos) > width / 20)else 0, 0, 2000))
+        yout = round(np.clip(yout + ypos * 2 / height if (abs(ypos) > height / 20)else 0, 0, 2000))
+        out = ('#1P' + str(xout + 500)[:-2] + '#2P' + str(yout+500)[:-2] + 'T100\r\n')
         print(out)
         servo.write(out.encode())
         'x max = 500, x min = 10, y min = 50, x max = x'
