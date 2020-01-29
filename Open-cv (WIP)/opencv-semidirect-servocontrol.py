@@ -14,7 +14,7 @@ specs_ori = cv2.imread('glass.png', -1)
 xout = 1000
 yout = 1000
 
-cap = cv2.VideoCapture(3)  # когда будет вебка поставить на 1
+cap = cv2.VideoCapture(1)  # когда будет вебка поставить на 1
 
 width = cap.get(3)
 height = cap.get(4)
