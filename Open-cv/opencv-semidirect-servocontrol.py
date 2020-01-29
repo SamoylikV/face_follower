@@ -29,7 +29,7 @@ while True:
         roi_color = img[y:y + h, x:x + w]
         x = (x * 2000 / width)
         y = (y * 2000 / height)
-        out = ('#1P' + str(round(x + 500))[:-2] + '#2P' + str(round(y))[:-2] + 'T100\r\n')
+        out = ('#1P' + str(round(x + 500))[:-2] + '#2P' + str(round(y+500))[:-2] + 'T100\r\n')
         print(out)
         servo.write(out.encode())
         'x max = 500, x min = 10, y min = 50, x max = x'
