@@ -1,3 +1,5 @@
-# kek
+# Face Follower
 
-Face Follower project for JuniorSkills Tyumen 2020
+Project for JuniorSkills Tyumen 2020
+
+Not the famous russian rapper follower.
