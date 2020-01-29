@@ -14,7 +14,7 @@ specs_ori = cv2.imread('glass.png', -1)
 xout = 1000
 yout = 1000
 
-cap = cv2.VideoCapture(0)  # когда будет вебка поставить на 1
+cap = cv2.VideoCapture(3)  # когда будет вебка поставить на 1
 
 width = cap.get(3)
 height = cap.get(4)
@@ -59,12 +59,12 @@ while True:
             xout = round(np.clip(xout + xpos * 16 / width if (abs(ypos) > width / 20) else 0, 0, 2000))
             yout = round(np.clip(yout + ypos * 16 / height if (abs(ypos) > height / 20) else 0, 0, 2000))
             if h > 0 and w > 0:
-                # glass_symin = int(y + h / 2)
-                # glass_symax = int(y + h)
+                glass_symin = int(y)
+                glass_symax = int(y + h)
                 peremenaya_sozdanaya_hz_zachem = h * 2
-                glass_symin = int(y + h)
-                glass_symax = int(y + 1.5 * h)
-                sh_glass =  glass_symax - glass_symin - 100
+                glass_symin = int(y)
+                glass_symax = int(y + h)
+                sh_glass =  glass_symax - glass_symin
 
                 face_glass_roi_color = img[glass_symin:glass_symax, x:x + w]
 
