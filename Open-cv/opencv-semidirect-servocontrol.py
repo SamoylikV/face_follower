@@ -3,10 +3,17 @@ import cv2
 import serial
 import random
 import sys
+import 
 
 # sys.setdefaultencoding('ascii')
 servo = serial.Serial('/dev/ttyACM0', 9600, timeout=.1)
+
+
+warn('')
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+
+
+
 
 xout = 1000
 yout = 1000
