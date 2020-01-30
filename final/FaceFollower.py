@@ -3,16 +3,18 @@ import cv2
 import serial
 import random
 import sys
+import requests
+
 
 very_important_int = 0
 
 # sys.setdefaultencoding('ascii')
-# arduino = serial.Serial('COM5', 115200, timeout=.1)
+arduino = serial.Serial('COM7', 115200, timeout=.1)
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 specs_ori = cv2.imread('scope.png', -1)
 xout = 1000
 yout = 1000
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 ToBeTrueOrNotToBeTrue = 0
 width = cap.get(3)
 height = cap.get(4)
@@ -43,6 +45,11 @@ while True:
     ret, img = cap.read()
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+    # for i in range(10):
+    #     return_value, image = cap.read()
+    #     cv2.imwrite('opencv' + str(i) + '.png', image)
+        # files = {'file': open('opencv' + str(i) + ".png", 'rb')}
+    #del (camera)
     if format(len(faces)) == "1":
         ToBeTrueOrNotToBeTrue = 1
     elif format(len(faces)) == "0":
@@ -73,10 +80,13 @@ while True:
         #         cv2.putText(img, "Remove one of these faces", (x - 50, y + 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 3)
         #         print(4)
         if ToBeTrueOrNotToBeTrue == 1:
-            xpos = (x - width / 2)
-            ypos = (y - height / 2)
-            xout = round(np.clip(xout + xpos * 16 / width if (abs(ypos) > width / 20) else 0, 0, 2000))
-            yout = round(np.clip(yout + ypos * 16 / height if (abs(ypos) > height / 20) else 0, 0, 2000))
+            xpos = ((x+w/2)-width/2)
+            ypos = ((y+h/2)-height/2)
+            #print(xpos, ypos)
+
+            xout = round(np.clip(xout + -5*(xpos / abs(xpos/2) if (abs(ypos) > width / 20) else 0), 0, 2000))
+            yout = round(np.clip(yout + 5*(ypos / abs(ypos/2) if (abs(ypos) > height / 20) else 0), 0, 2000))
+
             if h > 0 and w > 0:
                 # glass_symin = int(y + h / 2)
                 # glass_symax = int(y + h)
@@ -87,17 +97,17 @@ while True:
                 face_glass_roi_color = img[glass_symin:glass_symax, x:x + w]
 
                 specs = cv2.resize(specs_ori, (w, sh_glass), interpolation=cv2.INTER_CUBIC)
-                transparentOverlay(face_glass_roi_color, specs)
+                transparentOverlay(face_glass_roi_color, specs)                                                       #-----------------------------------------------------------------------------------------------------------------------------------------
             cv2.circle(img, (x + w // 2, y + h // 2), (w // 2), (0, 255, 0), 2)
             string = [xx, '|', yy]
-            print(x, y)
+            #print(x, y)
             # cv2.putText(img, x, bottomLeftCornerOfText, font, fontScale, fontColor, lineType)
             # cv2.putText(img, y, bottomLeftCornerOfText + 5, font, fontScale, fontColor, lineType)
             roi_gray = gray[y:y + h, x:x + w]
             roi_color = img[y:y + h, x:x + w]
-            # out = (str(round(x / width * 512))[:-2] + 'a' + str(round(y / height * 512))[:-2]+'b')
-            # print(out)
-            # arduino.write(out.encode())
+            out = ('#1P' + str(xout + 500)[:-2] + '#2P' + str(yout+500)[:-2] + 'T100\r\n')
+            print(out)
+            arduino.write(out.encode())
             'x max = 500, x min = 10, y min = 50, x max = x'
         else:
             cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 2)
@@ -113,6 +123,7 @@ while True:
     # cv2.namedWindow("img", cv2.WINDOW_NORMAL)
     img = cv2.resize(img, (0, 0), fx=3, fy=2.5)
     cv2.imshow('img', img)
+    # r = requests.post('https://camera.cursor72.ru/upload/', files=files, data={})
     # kek = cv2.IMREAD_COLOR(img, -1)
     # cv2.imshow('img', kek)
     k = cv2.waitKey(30) & 0xff
